@@ -115,11 +115,13 @@ class AllotTaskView(GenericAPIView):
 
     def post(self, request, task_id):
         students = request.data
+        print students
         task_allot_list = []
         for student in students:
             task_allot_list.append(
                 TaskAllotment(status="TODO", student_id=student, task_id=task_id)
             )
+        print task_allot_list
         TaskAllotment.objects.bulk_create(task_allot_list)
         return HttpResponse(status=201)
 

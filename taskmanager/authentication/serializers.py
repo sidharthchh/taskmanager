@@ -1,6 +1,7 @@
 from __future__ import unicode_literals, absolute_import
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from taskmanager.models import User
@@ -18,6 +19,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='userprofile.role', allow_blank=False)
     email = serializers.EmailField(allow_blank=False,
                                    validators=[UniqueValidator(queryset=User.objects.all())])
+
+    def validate(self, attrs):
+        if attrs.get('userprofile', {}).get('role') not in ('STUDENT', 'TEACHER'):
+            raise ValidationError('Invalid role!')
+        return super(CreateUserSerializer, self).validate(attrs)
 
     def create(self, validated_data):
         profile_data = validated_data.pop('userprofile')

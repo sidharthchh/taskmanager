@@ -2,7 +2,7 @@
  * Created by sid on 20/9/17.
  */
 angular.module('TaskManagerApp.controllers', [])
-    .controller('signupController', function ($scope, signUpService, $cookieStore) {
+    .controller('signupController', function ($scope, signUpService, signInService, $cookieStore, $window) {
         $scope.role = "STUDENT";
         $scope.signup = function () {
             $scope.errorMessage = "";
@@ -14,6 +14,21 @@ angular.module('TaskManagerApp.controllers', [])
                 "role": $scope.role
             }
             signUpService.signUp(signupData).then(function (response) {
+                console.log(response)
+                if (response.status == 201) {
+                    $scope.signin();
+                }
+                else {
+                    $scope.errorMessage = response.data;
+                }
+            })
+        }
+        $scope.signin = function () {
+            var signinData = {
+                "email": $scope.email,
+                "password": $scope.password,
+            }
+            signInService.signIn(signinData).then(function (response) {
                 if (response.status == 201) {
                     // save the auth_token in cookies
                     $cookieStore.put('auth_token', response.data.auth_token);
@@ -63,6 +78,7 @@ angular.module('TaskManagerApp.controllers', [])
                 }
                 else {
                     $window.location.href = "/"
+                    console.log(response)
                     $scope.errorMessage = response.data;
                 }
             })
@@ -125,18 +141,17 @@ angular.module('TaskManagerApp.controllers', [])
                 }
             })
         }
-        $scope.allotTask = function (task_id, students) {
+        $scope.allotTask = function (task_id) {
             $scope.errorMessage = "";
-            console.log($scope.aStudents);
-            var taskData = students;
-            userService.allotTask(taskData).then(function (response) {
+            var taskData = $scope.aStudents;
+            userService.allotTask(task_id, taskData).then(function (response) {
                 console.log(response);
                 if (response.status == 201) {
                     $scope.errorMessage = "Task Created and Allotted!"
                     // navigate to home page
                     $timeout(function () {
                         $window.location.href = '/home/';
-                    }, 500)
+                    }, 800)
 
                 }
                 else {
