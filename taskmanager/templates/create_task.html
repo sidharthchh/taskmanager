@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+
+<body ng-app="TaskManagerApp">
+{% verbatim %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/home">Task Manager</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+    </ul>
+    <form ng-controller="logoutController" class="form-inline my-2 my-lg-0">
+        <a class="nav-link" href="#">Welcome {{$root.userData.email}}! </a>
+        <a class="nav-link" href="#" ng-click="logout()">Logout</a>
+    </form>
+  </div>
+</nav>
+{% endverbatim %}
+<div class="container-fluid" ng-controller="userController">
+  <div ng-init="userData({{ request.user.id }})"></div>
+</div>
+{% verbatim %}
+<div $root.userData.userprofile.role=='ADMIN'||$root.userData.userprofile.role=='TEACHER'">
+  <div class="container" ng-controller="adminController">
+    <div ng-init="getStudents()"></div>
+    <h3>Create Task</h3>
+    <div class="container" ng-if="errorMessage">
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    </div>
+    <form class="col-5" name="createTaskForm" ng-submit="createTask()">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" ng-model="title" required class="form-control" aria-describedby="emailHelp"
+               placeholder="Enter Task Title">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" ng-model="description" required class="form-control" aria-describedby="emailHelp"
+               placeholder="Enter Task Description">
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlSelect2">Select Students to Assign</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2" ng-model="aStudents">
+          <option ng-repeat="student in students" value="{{student.id}}">{{student.email}}</option>
+        </select>
+        <i>Hold ctrl and select</i>
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>
+<script type="text/javascript" src="/static/lib/angular.js"></script>
+<script type="text/javascript" src="/static/lib/angular-route.min.js"></script>
+<script type="text/javascript" src="/static/lib/angular-cookies.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/services.js"></script>
+<script src="/static/js/controllers.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+</body>
+{% endverbatim %}
+</html>

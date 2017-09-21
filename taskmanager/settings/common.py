@@ -82,13 +82,13 @@ INSTALLED_APPS = [
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-
     'rest_framework',
+    'django_filters',
     'rest_framework_swagger',
     'rest_framework.authtoken',
     'taskmanager.authentication',
     'taskmanager',
-
+    'password_reset',
 ]
 
 MIDDLEWARE = [
@@ -126,8 +126,14 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+
+    ),
 }
+
+LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'taskmanager.wsgi.application'
 
@@ -138,7 +144,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DB_HOST = "localhost"
 DB_PORT = "5432"
 DB_PASSWORD = "zapyle123"
-DB_NAME = "taskmanager"
+DB_NAME = "taskman"
 DB_USER = "zapyle"
 
 DATABASES = {
@@ -157,6 +163,7 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 # Get configuration of email from environment variables
+
 EMAIL_URL = os.environ.get('EMAIL_URL')
 SENDGRID_USERNAME = os.environ.get('SENDGRID_USERNAME')
 SENDGRID_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
@@ -164,6 +171,7 @@ if not EMAIL_URL and SENDGRID_USERNAME and SENDGRID_PASSWORD:
     EMAIL_URL = 'smtp://%s:%s@smtp.sendgrid.net:587/?tls=True' % (
         SENDGRID_USERNAME, SENDGRID_PASSWORD)
 email_config = dj_email_url.parse(EMAIL_URL or 'console://')
+DEFAULT_FROM_EMAIL = 'webmaster@taskmanager'
 
 EMAIL_BACKEND = email_config['EMAIL_BACKEND']
 EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
@@ -173,6 +181,11 @@ EMAIL_HOST = email_config['EMAIL_HOST']
 EMAIL_PORT = email_config['EMAIL_PORT']
 EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
 EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
+
+# User substitution
+# https://docs.djangoproject.com/en/1.11/topics/auth/customizing/#auth-custom-user
+
+AUTH_USER_MODEL = 'taskmanager.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
