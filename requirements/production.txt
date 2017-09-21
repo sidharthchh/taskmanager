@@ -1,2 +1,0 @@
-gunicorn==19.7.1
-Logentries==0.17
