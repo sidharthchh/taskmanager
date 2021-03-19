@@ -15,7 +15,7 @@ django-password-reset==1.0
 django-redis==4.8.0
 django-rest-multiple-models==1.8.2
 django-rest-swagger==2.1.2
-djangorestframework==3.6.3
+djangorestframework==3.11.2
 idna==2.6
 itypes==1.1.0
 Jinja2==2.9.6
