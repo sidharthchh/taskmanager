@@ -8,7 +8,7 @@ coreschema==0.0.4
 coverage==4.4.1
 dj-database-url==0.4.2
 dj-email-url==0.0.10
-Django==1.11.1
+Django==2.2.24
 django-coverage-plugin==1.4.2
 django-filter==1.0.2
 django-password-reset==1.0
